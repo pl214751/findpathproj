@@ -2,8 +2,8 @@ import numpy as np
 import cv2
 
 
-img = cv2.imread("/Users/local/Desktop/nefixedIMG-3015.jpg")
-img2 = cv2.imread("/Users/local/Desktop/nefixedIMG-3016.jpg")
+img = cv2.imread("/Users/local/Desktop/nefixedIMG-3015.jpeg")
+img2 = cv2.imread("/Users/local/Desktop/nefixedIMG-3016.jpeg")
 original = img.copy()
 original2 = img2.copy()
 actualoriginal = img.copy()
@@ -81,10 +81,12 @@ cv2.arrowedLine(original2,(261,41), (324,37),(0,250,0),3)
 
 
 cv2.imshow("img", original)
+cv2.waitKey(0)
 cv2.imshow("x", actualoriginal)
 cv2.waitKey(0)
 
-cv2.imshow("img", original2)
-cv2.imshow("x", actualoriginal2)
+cv2.imshow("nextimg", original2)
+cv2.waitKey(0)
+cv2.imshow("x2", actualoriginal2)
 cv2.waitKey(0)
 cv2.destroyAllWindows()
