@@ -74,10 +74,25 @@ contours2, hierarchy2 = cv2.findContours(skel2, cv2.RETR_TREE, cv2.CHAIN_APPROX_
 h2, w2 = skel2.shape[:2]
 cv2.drawContours(original2, contours2, -1, (0,255,0), 2)
 
+x = 21
+y = 20
+while True:
+  if np.any(skel[x, y] == 255):
+        cv2.arrowedLine(original, (x,y), (x-40, y), (0, 0, 255), 3)
+        break
+  else:
+    x=x+1
+    y=y+1
 
-
-cv2.arrowedLine(original,(102,47), (14,45),(0,250,0),3)
-cv2.arrowedLine(original2,(261,41), (324,37),(0,250,0),3)
+x2 = 0
+y2 = 7
+while True:
+  if np.any(skel2[x2, y2] == 255):
+        cv2.arrowedLine(original2, (x2-40, y2-50), (x2,y2-50), (0, 0, 255), 3)
+        break
+  else:
+    x2=x2+4
+    y2=y2+1
 
 
 cv2.imshow("img", original)
