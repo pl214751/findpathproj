@@ -1,0 +1,90 @@
+import numpy as np
+import cv2
+
+
+img = cv2.imread("/Users/local/Desktop/nefixedIMG-3015.jpg")
+img2 = cv2.imread("/Users/local/Desktop/nefixedIMG-3016.jpg")
+original = img.copy()
+original2 = img2.copy()
+actualoriginal = img.copy()
+actualoriginal2 = img2.copy()
+img = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+img=cv2.GaussianBlur(img,(3,3),0)
+ret,img = cv2.threshold(img, 130, 255, 0)
+blurred = cv2.blur(original, (3,3))
+gray = cv2.cvtColor(blurred, cv2.COLOR_BGR2GRAY)
+ret2, thresh = cv2.threshold(gray, 130, 255, 0)
+
+img2 = cv2.cvtColor(img2, cv2.COLOR_BGR2GRAY)
+img2=cv2.GaussianBlur(img2,(3,3),0)
+ret,img2 = cv2.threshold(img2, 130, 255, 0)
+blurred2 = cv2.blur(original2, (3,3))
+gray2 = cv2.cvtColor(blurred2, cv2.COLOR_BGR2GRAY)
+ret2, thresh2 = cv2.threshold(gray2, 110, 255, 0)
+
+
+
+size = np.size(img)
+skel = np.zeros(img.shape, np.uint8)
+
+
+element = cv2.getStructuringElement(cv2.MORPH_CROSS, (3,3))
+
+
+while True:
+
+  open = cv2.morphologyEx(img, cv2.MORPH_OPEN, element)
+
+  temp = cv2.subtract(img, open)
+
+  eroded = cv2.erode(img, element)
+  skel = cv2.bitwise_or(skel,temp)
+  img = eroded.copy()
+
+  if cv2.countNonZero(img)==0:
+      break
+
+size2 = np.size(img2)
+skel2 = np.zeros(img2.shape, np.uint8)
+
+
+element2 = cv2.getStructuringElement(cv2.MORPH_CROSS, (3,3))
+
+
+while True:
+
+  open = cv2.morphologyEx(img2, cv2.MORPH_OPEN, element2)
+
+  temp2 = cv2.subtract(img2, open)
+
+  eroded2 = cv2.erode(img2, element2)
+  skel2 = cv2.bitwise_or(skel2,temp2)
+  img2 = eroded2.copy()
+
+  if cv2.countNonZero(img2)==0:
+      break
+
+contours, hierarchy = cv2.findContours(skel, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
+
+h, w = skel.shape[:2]
+cv2.drawContours(original, contours, -1, (0,255,0), 2)
+
+contours2, hierarchy2 = cv2.findContours(skel2, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
+
+h2, w2 = skel2.shape[:2]
+cv2.drawContours(original2, contours2, -1, (0,255,0), 2)
+
+
+
+cv2.arrowedLine(original,(102,47), (14,45),(0,250,0),3)
+cv2.arrowedLine(original2,(261,41), (324,37),(0,250,0),3)
+
+
+cv2.imshow("img", original)
+cv2.imshow("x", actualoriginal)
+cv2.waitKey(0)
+
+cv2.imshow("img", original2)
+cv2.imshow("x", actualoriginal2)
+cv2.waitKey(0)
+cv2.destroyAllWindows()
